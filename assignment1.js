@@ -40,4 +40,11 @@ function handleRequests (req, res) {
             return res.end();
         })
     }
+
+    if(url === '/listUsers') {
+        res.write('<html>');
+        res.write('<head><title>List Users</title></head>');
+        res.write('<body><a href="/home">Home</a></body>');
+        res.write('</html>');
+    }
 }
