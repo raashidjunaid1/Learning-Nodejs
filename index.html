@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Some Title</title>
+
+<style>
+.data-selector-highlighter {
+  background-color: #ccc;
+  bottom:0;
+  left:0;
+  position: fixed;
+  width:100%;
+  z-index:99;
+}
+
+.code {
+    background:black;
+    color:#fff;
+    line-height:1.5;
+    box-sizing:content-box;
+    white-space: nowrap;
+    padding:5px;
+    width:100%;
+    display: block;
+    min-height:1.5em;
+  }
+
+</style>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+        $("p").on('dblclick', function(event){
+            toggleDebug ();
+         
+        jQuery('head').append('<style>a[href="#"],a[href=""],a[href*="prototypes"]{ outline:5px solid red !important; }</style>')
+
+        function toggleDebug () {
+            enableDebug();
+        }
+ 
+        jQuery(document).on('keyup', '.data-selector-highlighter .code', function () {
+            var query = $(this).text()
+            resetStyles()
+            highlightSelected(query)
+            });
+
+        function resetStyles (){ 
+            $('[style*="outline"]').removeAttr('style')
+        }
+
+        function highlightSelected(query) {
+            var result = $('[data-selector-highlighter] div')
+            query = $.trim(query)
+            if (query.length) {
+            try {
+                var el = $(query)
+                if (el.length) {
+                $(el).css('outline', '5px solid red')
+                var resultText = el.length > 1 ? el.length + ' matches' : '1 match'
+                result.text(resultText)
+                } else {
+                // valid selector no match
+                result.text('no match')
+                }
+            } catch (err) {
+                // invalid selector
+                result.text('no match')
+            }
+            } else {
+            // empty string
+            result.text('no match')
+            jQuery('code').text(' ')
+            }
+            };
+        });
+
+        function enableDebug () {
+            $('body').append('<div data-selector-highlighter=""><class ="code contenteditable"></code><div></div">')
+            $('.data-selector-highlighter .code').focus()
+        }
+    }); 
+    </script>
+</head>
+<body>
+
+<p>Click on this paragraph.</p>
+</body>
+</html>
